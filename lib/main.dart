@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_web_fcm/services/notification_service.dart';
 
 void main() async {
@@ -59,7 +60,13 @@ class MyHomePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text('User token $token'),
+            GestureDetector(
+                onTap: () {
+                  Clipboard.setData(ClipboardData(text: token));
+                },
+                child: Text(
+                  'User token $token',
+                )),
             ButtonBar(
               children: [
                 TextButton(
