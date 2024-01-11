@@ -13,6 +13,9 @@ class NotificationService {
 
   Future<void> listenNotifications() async {
     FirebaseMessaging.onMessage.listen(_showFlutterNotification);
+    FirebaseMessaging.onBackgroundMessage((message) async {
+      print(message);
+    });
   }
 
   Future<String> getToken() async {

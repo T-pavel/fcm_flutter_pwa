@@ -16,14 +16,16 @@ void main() async {
           authDomain: "test-9af84.firebaseapp.com"));
   final notificationService = NotificationService();
   notificationService.listenNotifications();
-  runApp(MyApp(
-    notificationService: notificationService,
-  ));
+  final String token = await notificationService.getToken();
+
+  runApp(MyApp(notificationService: notificationService, token: token));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.notificationService});
+  const MyApp(
+      {super.key, required this.notificationService, required this.token});
   final NotificationService notificationService;
+  final String token;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,15 +36,21 @@ class MyApp extends StatelessWidget {
       ),
       home: MyHomePage(
           title: 'Flutter demo FCM with PWA',
-          notificationService: notificationService),
+          notificationService: notificationService,
+          token: token),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage(
-      {super.key, required this.title, required this.notificationService});
+  MyHomePage(
+      {super.key,
+      required this.title,
+      required this.notificationService,
+      required this.token});
   final String title;
+  final String token;
+
   final NotificationService notificationService;
   @override
   Widget build(BuildContext context) {
@@ -51,14 +59,13 @@ class MyHomePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            const Text('Title'),
+            Text('User token $token'),
             ButtonBar(
               children: [
                 TextButton(
                     onPressed: () async {
                       notificationService.sendPushMessage(
-                          await notificationService.getToken(),
-                          "Hello from main page");
+                          token, "Hello from main page");
                     },
                     child: const Text('Отправить уведомление')),
                 TextButton(
