@@ -64,7 +64,7 @@ class MyHomePage extends StatelessWidget {
                 onTap: () {
                   Clipboard.setData(ClipboardData(text: token));
                 },
-                child: Text(
+                child: SelectableText(
                   'User token $token',
                 )),
             ButtonBar(
