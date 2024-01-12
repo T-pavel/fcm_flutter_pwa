@@ -44,13 +44,13 @@ class NotificationService {
   Future<String> getToken() async {
     String platform = "";
     print('kIsWeb $kIsWeb');
+    print('v1');
     if (kIsWeb) {
       platform = getOSInsideWeb();
       print('PLATFORM ------- $platform');
       if (platform == "ios") {
-        print('APNSToken ${await FirebaseMessaging.instance.getAPNSToken()}');
-        return await FirebaseMessaging.instance.getAPNSToken() ??
-            'Is not token';
+        print('APNSToken ${await FirebaseMessaging.instance.getToken()}');
+        return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
       } else {
         print('Token ${await FirebaseMessaging.instance.getToken()}');
         return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
