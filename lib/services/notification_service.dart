@@ -31,20 +31,21 @@ class NotificationService {
 
   Future<String> getToken() async {
     FirebaseMessaging instance = FirebaseMessaging.instance;
-    NotificationSettings settings = await instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    // NotificationSettings settings = await instance.requestPermission(
+    //   alert: true,
+    //   announcement: false,
+    //   badge: true,
+    //   carPlay: false,
+    //   criticalAlert: false,
+    //   provisional: false,
+    //   sound: true,
+    // );
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      return await instance.getToken() ?? 'Is not token';
-    }
-    return 'Not permission';
+    // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    //   return await instance.getToken() ?? 'Is not token';
+    // }
+    return await instance.getToken() ?? 'Is not token';
+    // return 'Not permission';
   }
 
   String _constructFCMPayload(String? token, String body) {
