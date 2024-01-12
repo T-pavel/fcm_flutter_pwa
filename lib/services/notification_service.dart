@@ -26,9 +26,12 @@ class NotificationService {
   }
 
   Future<void> listenNotifications() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    FirebaseMessaging.onMessage.listen(_showFlutterNotification);
+  }
 
-    NotificationSettings settings = await messaging.requestPermission(
+  Future<String> getToken() async {
+    FirebaseMessaging instance = FirebaseMessaging.instance;
+    NotificationSettings settings = await instance.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -37,31 +40,11 @@ class NotificationService {
       provisional: false,
       sound: true,
     );
-    print('User granted permission: ${settings.authorizationStatus}');
-    FirebaseMessaging.onMessage.listen(_showFlutterNotification);
-  }
 
-  Future<String> getToken() async {
-    String platform = "";
-    print('kIsWeb $kIsWeb');
-    print('v1');
-    if (kIsWeb) {
-      platform = getOSInsideWeb();
-      print('PLATFORM ------- $platform');
-      if (platform == "ios") {
-        print('APNSToken ${await FirebaseMessaging.instance.getToken()}');
-        return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
-      } else {
-        print('Token ${await FirebaseMessaging.instance.getToken()}');
-        return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
-      }
-    } else {
-      if (Platform.isIOS) {
-        return await FirebaseMessaging.instance.getAPNSToken() ??
-            'Is not token';
-      }
-      return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      return await instance.getToken() ?? 'Is not token';
     }
+    return await instance.getToken() ?? 'Not permission';
   }
 
   String _constructFCMPayload(String? token, String body) {
