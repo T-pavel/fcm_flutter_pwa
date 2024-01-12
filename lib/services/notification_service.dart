@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:html';
+import 'dart:html' as dartHtml;
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,7 +8,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 String getOSInsideWeb() {
-  final userAgent = window.navigator.userAgent.toString().toLowerCase();
+  final userAgent =
+      dartHtml.window.navigator.userAgent.toString().toLowerCase();
+  print('USER AGENT ------- $userAgent');
   if (userAgent.contains("iphone")) return "ios";
   if (userAgent.contains("ipad")) return "ios";
   if (userAgent.contains("mac")) return "Web";
@@ -42,14 +44,25 @@ class NotificationService {
 
   Future<String> getToken() async {
     String platform = "";
+    print('kIsWeb $kIsWeb');
     if (kIsWeb) {
       platform = getOSInsideWeb();
+      print('PLATFORM ------- $platform');
       if (platform == "ios") {
+        print('APNSToken ${await FirebaseMessaging.instance.getAPNSToken()}');
+        return await FirebaseMessaging.instance.getAPNSToken() ??
+            'Is not token';
+      } else {
+        print('Token ${await FirebaseMessaging.instance.getToken()}');
+        return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
+      }
+    } else {
+      if (Platform.isIOS) {
         return await FirebaseMessaging.instance.getAPNSToken() ??
             'Is not token';
       }
+      return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
     }
-    return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
   }
 
   String _constructFCMPayload(String? token, String body) {
