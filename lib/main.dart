@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage(
+  const MyHomePage(
       {super.key,
       required this.title,
       required this.notificationService,

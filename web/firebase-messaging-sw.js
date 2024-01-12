@@ -18,7 +18,6 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((message) => {
   console.log("onBackgroundMessage", message);
 
-  console.log(self);
   self.addEventListener("push", function (event) {
     const notificationTitle = message.notification.title;
     const notificationOptions = {
@@ -29,6 +28,6 @@ messaging.onBackgroundMessage((message) => {
       self.registration.showNotification(notificationTitle, notificationOptions)
     );
   });
-  self.registration.showNotification(notificationTitle,
-    notificationOptions);
+  // self.registration.showNotification(notificationTitle,
+  //   notificationOptions);
 });

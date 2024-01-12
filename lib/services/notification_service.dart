@@ -12,10 +12,20 @@ class NotificationService {
   }
 
   Future<void> listenNotifications() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
     FirebaseMessaging.onMessage.listen(_showFlutterNotification);
-    FirebaseMessaging.onBackgroundMessage((message) async {
-      print(message);
-    });
   }
 
   Future<String> getToken() async {
