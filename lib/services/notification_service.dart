@@ -1,33 +1,32 @@
 import 'dart:convert';
-import 'dart:html' as dartHtml;
-import 'dart:io';
+// import 'dart:html' as dartHtml;
+// import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-String getOSInsideWeb() {
-  final userAgent =
-      dartHtml.window.navigator.userAgent.toString().toLowerCase();
-  print('USER AGENT ------- $userAgent');
-  if (userAgent.contains("iphone")) return "ios";
-  if (userAgent.contains("ipad")) return "ios";
-  if (userAgent.contains("macintosh")) return "ios";
-  if (userAgent.contains("ios")) return "ios";
-  if (userAgent.contains("android")) return "Android";
-  return "Web";
-}
+// String getOSInsideWeb() {
+//   final userAgent =
+//       dartHtml.window.navigator.userAgent.toString().toLowerCase();
+//   print('USER AGENT ------- $userAgent');
+//   if (userAgent.contains("iphone")) return "ios";
+//   if (userAgent.contains("ipad")) return "ios";
+//   if (userAgent.contains("macintosh")) return "ios";
+//   if (userAgent.contains("ios")) return "ios";
+//   if (userAgent.contains("android")) return "Android";
+//   return "Web";
+// }
 
 class NotificationService {
+  static FirebaseMessaging messaging = FirebaseMessaging.instance;
   void _showFlutterNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     Fluttertoast.showToast(msg: notification?.body ?? "Ошибка");
   }
 
   Future<void> listenNotifications() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -61,17 +60,17 @@ class NotificationService {
     //         'Is not token';
     //   }
 
-    FirebaseMessaging instance = FirebaseMessaging.instance;
-    await instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: true,
-      sound: true,
-    );
-    return await instance.getToken() ?? 'Is not token';
+    // FirebaseMessaging instance = FirebaseMessaging.instance;
+    // await instance.requestPermission(
+    //   alert: true,
+    //   announcement: false,
+    //   badge: true,
+    //   carPlay: false,
+    //   criticalAlert: false,
+    //   provisional: true,
+    //   sound: true,
+    // );
+    return await messaging.getToken() ?? 'Is not token';
     // }
   }
 
