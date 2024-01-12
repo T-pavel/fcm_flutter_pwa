@@ -13,8 +13,7 @@ String getOSInsideWeb() {
   print('USER AGENT ------- $userAgent');
   if (userAgent.contains("iphone")) return "ios";
   if (userAgent.contains("ipad")) return "ios";
-  if (userAgent.contains("mac")) return "Web";
-  if (userAgent.contains("macintosh")) return "Web";
+  if (userAgent.contains("macintosh")) return "ios";
   if (userAgent.contains("ios")) return "ios";
   if (userAgent.contains("android")) return "Android";
   return "Web";
