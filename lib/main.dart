@@ -81,7 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 TextButton(
                     onPressed: () async {
-                      widget.notificationService.getToken();
+                      String value =
+                          await widget.notificationService.getToken();
+                      _setToken(value);
                     },
                     child: const Text('Получить токен')),
                 TextButton(
