@@ -92,14 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           .sendPushMessage(_token, "Hello from main page");
                     },
                     child: const Text('Отправить уведомление')),
-                TextButton(
-                    onPressed: () async {
-                      Timer(const Duration(seconds: 5), () async {
-                        widget.notificationService
-                            .sendPushMessage(_token, "Hello from main page");
-                      });
-                    },
-                    child: const Text('Отправить уведомление c задержкой')),
               ],
             )
           ],
