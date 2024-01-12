@@ -21,12 +21,17 @@ import 'package:http/http.dart' as http;
 
 class NotificationService {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   void _showFlutterNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     Fluttertoast.showToast(msg: notification?.body ?? "Ошибка");
   }
 
   Future<void> listenNotifications() async {
+    FirebaseMessaging.onMessage.listen(_showFlutterNotification);
+  }
+
+  Future<String> getToken() async {
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
       announcement: false,
@@ -37,10 +42,6 @@ class NotificationService {
       sound: true,
     );
     print('User granted permission: ${settings.authorizationStatus}');
-    FirebaseMessaging.onMessage.listen(_showFlutterNotification);
-  }
-
-  Future<String> getToken() async {
     // String platform = "";
     // print('kIsWeb $kIsWeb');
     // print('v1');
