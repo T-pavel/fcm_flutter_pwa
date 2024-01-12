@@ -7,18 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-String getOSInsideWeb() {
-  final userAgent =
-      dartHtml.window.navigator.userAgent.toString().toLowerCase();
-  print('USER AGENT ------- $userAgent');
-  if (userAgent.contains("iphone")) return "ios";
-  if (userAgent.contains("ipad")) return "ios";
-  if (userAgent.contains("macintosh")) return "ios";
-  if (userAgent.contains("ios")) return "ios";
-  if (userAgent.contains("android")) return "Android";
-  return "Web";
-}
-
 class NotificationService {
   void _showFlutterNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;

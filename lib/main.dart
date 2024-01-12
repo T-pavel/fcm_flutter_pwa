@@ -17,16 +17,13 @@ void main() async {
           storageBucket: "test-9af84.appspot.com",
           authDomain: "test-9af84.firebaseapp.com"));
   notificationService.listenNotifications();
-  final String token = await notificationService.getToken();
 
-  runApp(MyApp(notificationService: notificationService, token: token));
+  runApp(MyApp(notificationService: notificationService));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp(
-      {super.key, required this.notificationService, required this.token});
+  const MyApp({super.key, required this.notificationService});
   final NotificationService notificationService;
-  final String token;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,50 +33,68 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: MyHomePage(
-          title: 'Flutter demo FCM with PWA',
-          notificationService: notificationService,
-          token: token),
+        title: 'Flutter demo FCM with PWA',
+        notificationService: notificationService,
+      ),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage(
-      {super.key,
-      required this.title,
-      required this.notificationService,
-      required this.token});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({
+    super.key,
+    required this.title,
+    required this.notificationService,
+  });
   final String title;
-  final String token;
 
   final NotificationService notificationService;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String _token = "No get token";
+
+  void _setToken(String value) {
+    setState(() {
+      _token = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: Text(widget.title)),
       body: Center(
         child: Column(
           children: [
             GestureDetector(
                 onTap: () {
-                  Clipboard.setData(ClipboardData(text: token));
+                  Clipboard.setData(ClipboardData(text: _token));
                 },
                 child: SelectableText(
-                  'User token $token',
+                  'User token $_token',
                 )),
             ButtonBar(
               children: [
                 TextButton(
                     onPressed: () async {
-                      notificationService.sendPushMessage(
-                          token, "Hello from main page");
+                      widget.notificationService.getToken();
+                    },
+                    child: const Text('Получить токен')),
+                TextButton(
+                    onPressed: () async {
+                      widget.notificationService
+                          .sendPushMessage(_token, "Hello from main page");
                     },
                     child: const Text('Отправить уведомление')),
                 TextButton(
                     onPressed: () async {
                       Timer(const Duration(seconds: 5), () async {
-                        notificationService.sendPushMessage(
-                            token, "Hello from main page");
+                        widget.notificationService
+                            .sendPushMessage(_token, "Hello from main page");
                       });
                     },
                     child: const Text('Отправить уведомление c задержкой')),
