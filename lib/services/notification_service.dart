@@ -42,26 +42,37 @@ class NotificationService {
   }
 
   Future<String> getToken() async {
-    String platform = "";
-    print('kIsWeb $kIsWeb');
-    print('v1');
-    if (kIsWeb) {
-      platform = getOSInsideWeb();
-      print('PLATFORM ------- $platform');
-      if (platform == "ios") {
-        print('APNSToken ${await FirebaseMessaging.instance.getToken()}');
-        return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
-      } else {
-        print('Token ${await FirebaseMessaging.instance.getToken()}');
-        return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
-      }
-    } else {
-      if (Platform.isIOS) {
-        return await FirebaseMessaging.instance.getAPNSToken() ??
-            'Is not token';
-      }
-      return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
-    }
+    // String platform = "";
+    // print('kIsWeb $kIsWeb');
+    // print('v1');
+    // if (kIsWeb) {
+    //   platform = getOSInsideWeb();
+    //   print('PLATFORM ------- $platform');
+    //   if (platform == "ios") {
+    //     print('APNSToken ${await FirebaseMessaging.instance.getToken()}');
+    //     return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
+    //   } else {
+    //     print('Token ${await FirebaseMessaging.instance.getToken()}');
+    //     return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
+    //   }
+    // } else {
+    //   if (Platform.isIOS) {
+    //     return await FirebaseMessaging.instance.getAPNSToken() ??
+    //         'Is not token';
+    //   }
+
+    FirebaseMessaging instance = FirebaseMessaging.instance;
+    await instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: true,
+      sound: true,
+    );
+    return await instance.getToken() ?? 'Is not token';
+    // }
   }
 
   String _constructFCMPayload(String? token, String body) {
