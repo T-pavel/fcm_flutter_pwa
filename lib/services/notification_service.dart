@@ -44,7 +44,7 @@ class NotificationService {
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       return await instance.getToken() ?? 'Is not token';
     }
-    return await instance.getToken() ?? 'Not permission';
+    return 'Not permission';
   }
 
   String _constructFCMPayload(String? token, String body) {

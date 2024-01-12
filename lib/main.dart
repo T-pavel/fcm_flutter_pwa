@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_web_fcm/services/notification_service.dart';
 
 void main() async {
-  print('INIT MAIN');
   WidgetsFlutterBinding.ensureInitialized();
   final notificationService = NotificationService();
   await Firebase.initializeApp(
@@ -80,8 +79,7 @@ class MyHomePage extends StatelessWidget {
                     onPressed: () async {
                       Timer(const Duration(seconds: 5), () async {
                         notificationService.sendPushMessage(
-                            await notificationService.getToken(),
-                            "Hello from main page");
+                            token, "Hello from main page");
                       });
                     },
                     child: const Text('Отправить уведомление c задержкой')),
