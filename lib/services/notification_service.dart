@@ -26,26 +26,23 @@ class NotificationService {
   }
 
   Future<void> listenNotifications() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    print('User granted permission: ${settings.authorizationStatus}');
     FirebaseMessaging.onMessage.listen(_showFlutterNotification);
   }
 
   Future<String> getToken() async {
-    FirebaseMessaging instance = FirebaseMessaging.instance;
-    // NotificationSettings settings = await instance.requestPermission(
-    //   alert: true,
-    //   announcement: false,
-    //   badge: true,
-    //   carPlay: false,
-    //   criticalAlert: false,
-    //   provisional: false,
-    //   sound: true,
-    // );
-
-    // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    //   return await instance.getToken() ?? 'Is not token';
-    // }
-    return await instance.getToken() ?? 'Is not token';
-    // return 'Not permission';
+    return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
   }
 
   String _constructFCMPayload(String? token, String body) {
