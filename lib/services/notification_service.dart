@@ -36,12 +36,15 @@ class NotificationService {
   String _constructFCMPayload(String? token, String body) {
     return jsonEncode({
       'to': token,
+      "click_action": "FLUTTER_NOTIFICATION_CLICK",
+      "priority": "high",
       'data': {
         'via': 'FlutterFire Cloud Messaging',
       },
       'notification': {
         'title': 'Title notification - FCM from my flutter app',
         'body': body,
+        "content_available": true
       },
     });
   }
