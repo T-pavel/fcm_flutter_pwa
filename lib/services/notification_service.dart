@@ -1,9 +1,22 @@
 import 'dart:convert';
+import 'dart:html';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+
+String getOSInsideWeb() {
+  final userAgent = window.navigator.userAgent.toString().toLowerCase();
+  if (userAgent.contains("iphone")) return "ios";
+  if (userAgent.contains("ipad")) return "ios";
+  if (userAgent.contains("mac")) return "Web";
+  if (userAgent.contains("macintosh")) return "Web";
+  if (userAgent.contains("ios")) return "ios";
+  if (userAgent.contains("android")) return "Android";
+  return "Web";
+}
 
 class NotificationService {
   void _showFlutterNotification(RemoteMessage message) {
@@ -23,12 +36,19 @@ class NotificationService {
       provisional: false,
       sound: true,
     );
-
     print('User granted permission: ${settings.authorizationStatus}');
     FirebaseMessaging.onMessage.listen(_showFlutterNotification);
   }
 
   Future<String> getToken() async {
+    String platform = "";
+    if (kIsWeb) {
+      platform = getOSInsideWeb();
+      if (platform == "ios") {
+        return await FirebaseMessaging.instance.getAPNSToken() ??
+            'Is not token';
+      }
+    }
     return await FirebaseMessaging.instance.getToken() ?? 'Is not token';
   }
 

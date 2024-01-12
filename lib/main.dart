@@ -6,7 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_web_fcm/services/notification_service.dart';
 
 void main() async {
+  print('INIT MAIN');
   WidgetsFlutterBinding.ensureInitialized();
+  final notificationService = NotificationService();
   await Firebase.initializeApp(
       options: const FirebaseOptions(
           apiKey: "AIzaSyBqYAWHzo5qXoFRHCtFsCI1qH_00GaSXvc",
@@ -15,7 +17,6 @@ void main() async {
           projectId: "test-9af84",
           storageBucket: "test-9af84.appspot.com",
           authDomain: "test-9af84.firebaseapp.com"));
-  final notificationService = NotificationService();
   notificationService.listenNotifications();
   final String token = await notificationService.getToken();
 
